@@ -16,7 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #pragma once
-#include "config_common.h"
+// #include "config_common.h"
 
 
 // ┌─────────────────────────────────────────────────┐
@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define MATRIX_ROW_PINS { C6, D7, E6, B4 }
 #define MATRIX_COL_PINS { F6, F7, B1, B3, B2, B6 }
-#define DIODE_DIRECTION COL2ROW
+// #define DIODE_DIRECTION COL2ROW // defined in json
 #define MATRIX_ROWS 8
 #define MATRIX_COLS 6
 #define DEBOUNCE 5
@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // └─────────────────────────────────────────────────┘ 
 
 #define USE_SERIAL
-#define SOFT_SERIAL_PIN D2
+// #define SOFT_SERIAL_PIN D2 // defined in json
 #define SERIAL_USE_MULTI_TRANSACTION
 //#define SPLIT_LAYER_STATE_ENABLE
 //#define SPLIT_USB_DETECT
@@ -46,10 +46,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // │ e n c o d e r s                                 │
 // └─────────────────────────────────────────────────┘ 
 
-#define ENCODERS_PAD_A       { F5 }
-#define ENCODERS_PAD_B       { F4 }
-#define ENCODERS_PAD_A_RIGHT { F4 }
-#define ENCODERS_PAD_B_RIGHT { F5 }
+// #define ENCODERS_PAD_A       { F5 }
+// #define ENCODERS_PAD_B       { F4 }
+// #define ENCODERS_PAD_A_RIGHT { F4 }
+// #define ENCODERS_PAD_B_RIGHT { F5 }
 #define ENCODER_RESOLUTION 2
 
 
@@ -68,7 +68,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // │ r g b   l e d s                                 │
 // └─────────────────────────────────────────────────┘ 
 
-#define RGB_DI_PIN D3
+// #define RGB_DI_PIN D3
+// #define WS2812_DI_PIN D3 // defined in json
 #define RGBLED_NUM 42
 #define RGBLED_SPLIT { 21, 21 }
 #define RGB_MATRIX_LED_COUNT RGBLED_NUM
@@ -89,19 +90,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // ┌─────────────────────────────────────────────────┐
 // │ a u d i o                                       │
 // └─────────────────────────────────────────────────┘ 
-
-#define AUDIO_PIN B5
-#define AUDIO_VOICES
-#define AUDIO_DAC_SAMPLE_MAX 4095U
-#define AUDIO_VOICE_DEFAULT butts_fader
-
 #ifdef AUDIO_ENABLE     
+#    define AUDIO_PIN B5
+#    define AUDIO_VOICES
+#    define AUDIO_DAC_SAMPLE_MAX 4095U
+#    define AUDIO_VOICE_DEFAULT butts_fader
+
 #    define KLOR_SOUND W__NOTE(_DS0), W__NOTE(_DS1), H__NOTE(_DS2), H__NOTE(_DS3), Q__NOTE(_DS4), Q__NOTE(_DS5), E__NOTE(_DS6), E__NOTE(_DS7), S__NOTE(_DS8), Q__NOTE(_GS0)
 #    define STARTUP_SONG SONG(KLOR_SOUND)
 #    define BYE_SOUND H__NOTE(_DS4), H__NOTE(_DS3), W__NOTE(_DS1)
 #    define GOODBYE_SONG SONG(BYE_SOUND)
-#    define DEFAULT_LAYER_SONGS \
-        { SONG(QWERTY_SOUND), SONG(COLEMAK_SOUND) }
+#    define DEFAULT_LAYER_SONGS { SONG(QWERTY_SOUND) }
 
 #endif 
 
