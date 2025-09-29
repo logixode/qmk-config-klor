@@ -10,6 +10,9 @@ for more options.
 // #define MASTER_LEFT
 #define MASTER_RIGHT
 
+// Vial configuration
+// #define VIAL_KEYBOARD_UID {0xBA, 0x38, 0x22, 0x3F, 0x8C, 0x42, 0x0F, 0x44}
+
 //#define TAPPING_TERM 170
 #define TAPPING_TERM 170
 
@@ -18,6 +21,10 @@ for more options.
 
 // Enable rapid switch from tap to hold, disables double tap hold auto-repeat.
 #define TAPPING_FORCE_HOLD
+
+// Homerow mod configurations
+#define PERMISSIVE_HOLD
+#define HOLD_ON_OTHER_KEY_PRESS
 
 // Auto Shift - DISABLED to save memory
 // #define NO_AUTO_SHIFT_ALPHA
@@ -38,25 +45,25 @@ for more options.
 #    define RGB_MATRIX_STARTUP_MODE RGB_MATRIX_SOLID_COLOR
 // RGB effects matching keyboard.json animations
 // #    define ENABLE_RGB_MATRIX_ALPHAS_MODS
-// #    define ENABLE_RGB_MATRIX_GRADIENT_LEFT_RIGHT
-#    define ENABLE_RGB_MATRIX_BREATHING
-#    define ENABLE_RGB_MATRIX_BAND_SAT
-// #    define ENABLE_RGB_MATRIX_CYCLE_LEFT_RIGHT
-// #    define ENABLE_RGB_MATRIX_RAINBOW_MOVING_CHEVRON
+#    define ENABLE_RGB_MATRIX_GRADIENT_LEFT_RIGHT
+// #    define ENABLE_RGB_MATRIX_BREATHING
+// #    define ENABLE_RGB_MATRIX_BAND_SAT
+#    define ENABLE_RGB_MATRIX_CYCLE_LEFT_RIGHT
+#    define ENABLE_RGB_MATRIX_RAINBOW_MOVING_CHEVRON
 // #    define ENABLE_RGB_MATRIX_DUAL_BEACON
 #    define ENABLE_RGB_MATRIX_RAINBOW_BEACON
-#    define ENABLE_RGB_MATRIX_RAINDROPS
+// #    define ENABLE_RGB_MATRIX_RAINDROPS
 #    define ENABLE_RGB_MATRIX_HUE_BREATHING
-#    define ENABLE_RGB_MATRIX_HUE_WAVE
+// #    define ENABLE_RGB_MATRIX_HUE_WAVE
 // #    define ENABLE_RGB_MATRIX_PIXEL_RAIN
-#    define ENABLE_RGB_MATRIX_PIXEL_FLOW
+// #    define ENABLE_RGB_MATRIX_PIXEL_FLOW
 // #    define ENABLE_RGB_MATRIX_PIXEL_FRACTAL
 // #    define ENABLE_RGB_MATRIX_TYPING_HEATMAP
-#    define ENABLE_RGB_MATRIX_SOLID_REACTIVE_SIMPLE
+// #    define ENABLE_RGB_MATRIX_SOLID_REACTIVE_SIMPLE
 // #    define ENABLE_RGB_MATRIX_SOLID_REACTIVE
 // #    define ENABLE_RGB_MATRIX_SOLID_REACTIVE_WIDE
 // #    define ENABLE_RGB_MATRIX_SOLID_REACTIVE_CROSS
 // #    define ENABLE_RGB_MATRIX_SOLID_REACTIVE_NEXUS
-#    define ENABLE_RGB_MATRIX_SPLASH
-#    define ENABLE_RGB_MATRIX_SOLID_SPLASH
+// #    define ENABLE_RGB_MATRIX_SPLASH
+// #    define ENABLE_RGB_MATRIX_SOLID_SPLASH
 #endif
