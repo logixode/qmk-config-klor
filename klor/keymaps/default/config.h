@@ -27,8 +27,17 @@ for more options.
 #undef LOCKING_SUPPORT_ENABLE
 #undef LOCKING_RESYNC_ENABLE
 #define NO_ACTION_ONESHOT
-//#define NO_ACTION_TAPPING
-//#define NO_MUSIC_MODE
+
+// Memory optimization - disable unused features
+// #define NO_ACTION_MACRO
+// #define NO_ACTION_FUNCTION
+// #define NO_MUSIC_MODE
+// #define DISABLE_LEADER
+
+// OLED optimization for memory usage
+// #define OLED_TIMEOUT 30000
+// #define OLED_UPDATE_INTERVAL 50  // Reduce update frequency
+// #define OLED_BRIGHTNESS 128      // Reduce brightness to save power
 
 // #define COMBO_COUNT 1
 
@@ -39,17 +48,17 @@ for more options.
 // RGB effects matching keyboard.json animations
 // #    define ENABLE_RGB_MATRIX_ALPHAS_MODS
 // #    define ENABLE_RGB_MATRIX_GRADIENT_LEFT_RIGHT
-#    define ENABLE_RGB_MATRIX_BREATHING
-#    define ENABLE_RGB_MATRIX_BAND_SAT
+// #    define ENABLE_RGB_MATRIX_BREATHING
+// #    define ENABLE_RGB_MATRIX_BAND_SAT
 // #    define ENABLE_RGB_MATRIX_CYCLE_LEFT_RIGHT
-// #    define ENABLE_RGB_MATRIX_RAINBOW_MOVING_CHEVRON
+#    define ENABLE_RGB_MATRIX_RAINBOW_MOVING_CHEVRON
 // #    define ENABLE_RGB_MATRIX_DUAL_BEACON
-#    define ENABLE_RGB_MATRIX_RAINBOW_BEACON
-#    define ENABLE_RGB_MATRIX_RAINDROPS
-#    define ENABLE_RGB_MATRIX_HUE_BREATHING
+// #    define ENABLE_RGB_MATRIX_RAINBOW_BEACON
+// #    define ENABLE_RGB_MATRIX_RAINDROPS
+// #    define ENABLE_RGB_MATRIX_HUE_BREATHING
 #    define ENABLE_RGB_MATRIX_HUE_WAVE
 // #    define ENABLE_RGB_MATRIX_PIXEL_RAIN
-#    define ENABLE_RGB_MATRIX_PIXEL_FLOW
+// #    define ENABLE_RGB_MATRIX_PIXEL_FLOW
 // #    define ENABLE_RGB_MATRIX_PIXEL_FRACTAL
 // #    define ENABLE_RGB_MATRIX_TYPING_HEATMAP
 #    define ENABLE_RGB_MATRIX_SOLID_REACTIVE_SIMPLE
@@ -57,6 +66,6 @@ for more options.
 // #    define ENABLE_RGB_MATRIX_SOLID_REACTIVE_WIDE
 // #    define ENABLE_RGB_MATRIX_SOLID_REACTIVE_CROSS
 // #    define ENABLE_RGB_MATRIX_SOLID_REACTIVE_NEXUS
-#    define ENABLE_RGB_MATRIX_SPLASH
-#    define ENABLE_RGB_MATRIX_SOLID_SPLASH
+// #    define ENABLE_RGB_MATRIX_SPLASH
+// #    define ENABLE_RGB_MATRIX_SOLID_SPLASH
 #endif
