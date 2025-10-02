@@ -18,9 +18,11 @@
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 #include <string.h>
+#include "klor.h"
 #if HAPTIC_ENABLE
   #include "drivers/haptic/DRV2605L.h"
 #endif //HAPTIC ENABLE
+#include "os_detection.h"
 
 // ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 // │ K E Y M A P S                                                                                                                              │
@@ -100,14 +102,38 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  )*/ 
 };
 
+// ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+// │ POST INIT / BOOT                                                                                                                           │
+// └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+// ▝▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▘
+
+void keyboard_post_init_user(void) {
+  // Call the post init code.
+  #if HAPTIC_ENABLE
+    haptic_disable(); // disables per key haptic feedback by default
+  #endif //HAPTIC ENABLE
+  
+  // Set up automatic OS detection and key mapping
+  // Wait a bit for OS detection to complete
+  wait_ms(1000);
+  os_variant_t detected_os = detected_host_os();
+  if (detected_os == OS_MACOS || detected_os == OS_IOS) {
+    keymap_config.swap_lctl_lgui = true;  // Enable Mac key mapping
+    eeconfig_update_keymap(&keymap_config);
+  }
+}
+
 #ifdef ENCODER_MAP_ENABLE
 
   const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
-      [0] =   { ENCODER_CCW_CW(KC_MS_WH_UP, KC_MS_WH_DOWN), ENCODER_CCW_CW(KC_VOLD, KC_VOLU)  },
-      [1] =   { ENCODER_CCW_CW(RGB_HUD, RGB_HUI),           ENCODER_CCW_CW(RGB_SAD, RGB_SAI)  },
-      [2] =   { ENCODER_CCW_CW(RGB_VAD, RGB_VAI),           ENCODER_CCW_CW(RGB_SPD, RGB_SPI)  },
-      [3] =   { ENCODER_CCW_CW(RGB_RMOD, RGB_MOD),          ENCODER_CCW_CW(KC_RIGHT, KC_LEFT) },
-      //                  Encoder 1                                     Encoder 2
+    // Base layer - Volume controls + mute/play
+    [0] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU),  ENCODER_CCW_CW(KC_BRID, KC_BRIU)  },
+    // Lower layer - Media controls
+    [1] = { ENCODER_CCW_CW(KC_MPRV, KC_MNXT),  ENCODER_CCW_CW(KC_MPRV, KC_MNXT)  },
+    // Raise layer - RGB controls
+    [2] = { ENCODER_CCW_CW(RM_SPDD, RM_SPDU),  ENCODER_CCW_CW(RM_VALD, RM_VALU)  },
+    // Adjust layer - RGB controls + Reset on click
+    [3] = { ENCODER_CCW_CW(RM_SPDD, RM_SPDU),  ENCODER_CCW_CW(RM_PREV, RM_NEXT)  }
   };
 
 #endif
@@ -127,32 +153,27 @@ char o_text[24] = "";
 // └───────────────────────────────────────────────────────────┘
 
 void render_os_lock_status(void) {
-    static const char PROGMEM sep_v[] = {0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0};
+    static const char PROGMEM sep_v[] = {0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0};
     static const char PROGMEM sep_h1[] = {0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0};
-    static const char PROGMEM sep_h2[] = {0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0};
+    // static const char PROGMEM sep_h2[] = {0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0xE1, 0};
     static const char PROGMEM face_1[] = {0x80, 0x81, 0x82, 0x83, 0x84, 0xE1, 0};  
     static const char PROGMEM face_2[] = {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xE1, 0}; 
     static const char PROGMEM os_m_1[] = {0x95, 0x96, 0};
     static const char PROGMEM os_m_2[] = {0xB5, 0xB6, 0};
     static const char PROGMEM os_w_1[] = {0x97, 0x98, 0};
     static const char PROGMEM os_w_2[] = {0xB7, 0xB8, 0};
-    static const char PROGMEM s_lock[] = {0x8F, 0x90, 0};
+    // static const char PROGMEM s_lock[] = {0x8F, 0x90, 0};
     static const char PROGMEM n_lock[] = {0x91, 0x92, 0};
     static const char PROGMEM c_lock[] = {0x93, 0x94, 0};
     static const char PROGMEM b_lock[] = {0xE1, 0xE1, 0};
-    #ifdef AUDIO_ENABLE  
-      static const char PROGMEM aud_en[] = {0xAF, 0xB0, 0};
-      static const char PROGMEM aud_di[] = {0xCF, 0xD0, 0};
-    #endif
-    #ifdef HAPTIC_ENABLE
-      static const char PROGMEM hap_en[] = {0xB1, 0xB2, 0};
-    #endif
 
 // os mode status ────────────────────────────────────────┐
 
     oled_write_ln_P(sep_v, false);
 
-    if (keymap_config.swap_lctl_lgui) {
+    // Use automatic OS detection instead of manual swap
+    os_variant_t detected_os = detected_host_os();
+    if (detected_os == OS_MACOS || detected_os == OS_IOS) {
         oled_write_P(os_m_1, false); // ──── MAC
     } else {
         oled_write_P(os_w_1, false); // ──── WIN
@@ -161,7 +182,7 @@ void render_os_lock_status(void) {
     oled_write_P(sep_h1, false);
     oled_write_P(face_1, false);
 
-    if (keymap_config.swap_lctl_lgui) {
+    if (detected_os == OS_MACOS || detected_os == OS_IOS) {
         oled_write_P(os_m_2, false); // ──── MAC
     } else {
         oled_write_P(os_w_2, false); // ──── WIN
@@ -170,80 +191,56 @@ void render_os_lock_status(void) {
     oled_write_P(sep_h1, false);
     oled_write_P(face_2, false);
     oled_write_ln_P(sep_v, false);
-
     
-// lock key layer status ─────────────────────────────────┐
-
+    // Display "Logixode" on the left and lock indicators on the right
+    oled_write("Logixode", false);
+    // oled_write_P(sep_h1, false);
+    
+    // oled_write_P(sep_h2, false);
+    // lock key layer status ─────────────────────────────────┐
+    
     led_t led_usb_state = host_keyboard_led_state();
-
+    
     if (led_usb_state.num_lock) {
-        oled_write_P(n_lock, false); // ──── NUMLOCK
+      oled_write_P(n_lock, false); // ──── NUMLOCK
     } else {
-        oled_write_P(b_lock, false);
+      oled_write_P(b_lock, false);
     }
     if (led_usb_state.caps_lock) {
-        oled_write_P(c_lock, false); // ─── CAPSLOCK
+      oled_write_P(c_lock, false); // ─── CAPSLOCK
     } else {
-        oled_write_P(b_lock, false);
+      oled_write_P(b_lock, false);
     }
-    if (led_usb_state.scroll_lock) { // ─ SCROLLLOCK
-        oled_write_P(s_lock, false);
-    } else {
-        oled_write_P(b_lock, false);
-    }
+  
 
-// hardware feature status ──────────────────────────────┐
-
-    oled_write_P(sep_h2, false);
-
-    #ifndef AUDIO_ENABLE 
-        oled_write_P(b_lock, false);
-    #endif
-    #ifndef HAPTIC_ENABLE 
-        oled_write_P(b_lock, false);
-    #endif
-
-    #ifdef AUDIO_ENABLE // ────────────────── AUDIO
-        if (is_audio_on()) { 
-          oled_write_P(aud_en, false); 
-        } else {
-          oled_write_P(aud_di, false);
-        }
-    #endif // AUDIO ENABLE
-
-     #ifdef HAPTIC_ENABLE // ─────────────── HAPTIC
-        oled_write_P(hap_en, false); 
-     #endif // HAPTIC ENABLE
 }
 
 
-// layer status ──────────────────────────────────────────┐
-
+  // layer status ──────────────────────────────────────────┐
+  
 int layerstate = 0;
 
-layer_state_t layer_state_set_user(layer_state_t state) {
-      switch (get_highest_layer(state)) {
-            case 0:
-                strcpy ( layer_state_str, "BASE QWERTY");
-                break;
-            case 1:
-                strcpy ( layer_state_str, "BASE COLEMAK");
-                break;
-            case 2:
-                strcpy ( layer_state_str, "LOWER");
-                break;
-            case 3:
-                strcpy ( layer_state_str, "RAISE");
-                break;
-            case 4:
-                strcpy ( layer_state_str, "ADJUST");
-                break;
-            default:
-                strcpy ( layer_state_str, "XXXXXX");
-      }
-
+layer_state_t layer_state_set_kb(layer_state_t state) {
+  switch (get_highest_layer(layer_state | default_layer_state)) {
+    case 0:
+      strcpy ( layer_state_str, "BASE QWERTY");
+      break;
+    case 1:
+      strcpy ( layer_state_str, "LOWER");
+      break;
+    case 2:
+      strcpy ( layer_state_str, "RAISE");
+      break;
+    case 3:
+      strcpy ( layer_state_str, "ADJUST");
+      break;
+    default:
+      strcpy ( layer_state_str, "XXXXXX");
+  }
   return state;
+    // return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
+
 
 // ┌───────────────────────────────────────────────────────────┐
 // │ w r i t e   t o   o l e d                                 │
